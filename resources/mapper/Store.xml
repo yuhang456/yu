@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yu.dao.StoreDao">
+<select id="allCountry" resultType="Country">
+SELECT cityName,countryId,countryName FROM t_country WHERE cityName=#{cityName}
+</select>
+<select id="allStore" resultType="Store">
+SELECT countryId,storeId,storeName FROM t_store WHERE countryId=#{countryId}
+</select>
+<select id="countryNameById" resultType="String">
+SELECT countryName FROM t_country WHERE countryId=#{countryId}
+</select>
+</mapper>

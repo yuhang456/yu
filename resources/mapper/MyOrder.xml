@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yu.dao.MyOrderDao">
+<insert id="insertUserOrder" parameterType="MyOrder">
+INSERT t_order(orderNum,orderStore,userTel,userAddress,goodsCarAllGoods,totalGoodsPrice,orderStatus,downOrderTime) VALUES(#{orderNum},#{orderStore},#{userTel},#{userAddress},#{goodsCarAllGoods},#{totalGoodsPrice},#{orderStatus},#{downOrderTime})
+</insert>
+<select id="isExistOrderNum" resultType="String">
+SELECT userTel FROM t_order WHERE orderNum=#{orderNum}
+</select>
+<select id="selectMyOrderInfor" resultType="MyOrder">
+SELECT orderNum,orderStore,userTel,userAddress,goodsCarAllGoods,totalGoodsPrice,orderStatus,downOrderTime FROM t_order WHERE orderNum=#{orderNum}
+</select>
+<select id="getOrderStatus" resultType="MyOrder">
+SELECT orderNum,goodsCarAllGoods,downOrderTime FROM t_order WHERE orderStatus=0
+</select>
+<update id="updateOrderStatus">
+UPDATE t_order set orderStatus=#{orderStatus} WHERE orderNum=#{orderNum}
+</update>
+<select id="selectAllMyOrderInfor" resultType="MyOrder">
+SELECT orderNum,orderStore,userTel,userAddress,goodsCarAllGoods,totalGoodsPrice,orderStatus,downOrderTime FROM t_order WHERE userTel=#{userTel}
+</select>
+<delete id="deleteMyOrderInfor">
+DELETE FROM t_order WHERE orderNum=#{orderNum}
+</delete>
+<select id="allOrderInfor" resultType="MyOrder">
+SELECT orderNum,orderStore,userTel,userAddress,goodsCarAllGoods,totalGoodsPrice,orderStatus,downOrderTime FROM t_order
+</select>
+</mapper>

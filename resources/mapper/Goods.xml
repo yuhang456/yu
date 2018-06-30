@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yu.dao.GoodsDao">
+<select id="allGoodsSelect" resultType="Goods">
+SELECT goodsPicture,goodsNum,goodsName,goodsPrice,goodsSurplus FROM t_goods
+</select>
+<!-- 分页查询 
+<select id="allGoodsSelect" resultType="Goods">
+SELECT goodsPicture,goodsNum,goodsName,goodsPrice,goodsSurplus FROM t_goods 
+WHERE 1=1
+<if test="goodsName!=null and !&quot;&quot;.equals(goodsName)">
+and goodsName like '%' #{goodsName} '%'
+</if>
+limit #{startPos},#{pageSize}
+</select>
+-->
+
+<select id="oneGoodsSelect" resultType="Goods">
+SELECT goodsPicture,goodsNum,goodsName,goodsPrice,goodsSurplus FROM t_goods where goodsNum=#{goodsNum}
+</select>
+
+	<!-- 查询商品的总条数
+	<select id="AllCount" resultType="int">
+	SELECT count(*) FROM t_goods
+	<if test="goodsName!=null and !&quot;&quot;.equals(goodsName)">
+	WHERE goodsName like '%' #{goodsName} '%'
+	</if>
+	</select>
+	 -->
+	<update id="reduceGoodsSurplus">
+	UPDATE t_goods set goodsSurplus=goodsSurplus-#{reGoodsSurplus} WHERE goodsNum=#{goodsNum}
+	</update>
+	<update id="addGoodsSurplus">
+	UPDATE t_goods set goodsSurplus=goodsSurplus+#{adGoodsSurplus} WHERE goodsName=#{goodsName}
+	</update>
+	<!-- 管理员修改商品信息 -->
+	<update id="updateGoodsInfor" parameterType="Goods">
+	UPDATE t_goods set goodsName=#{goodsName},goodsPrice=#{goodsPrice},goodsSurplus=#{goodsSurplus} WHERE goodsNum=#{goodsNum}
+	</update>
+	<delete id="delGoods">
+	DELETE FROM t_goods WHERE goodsNum=#{goodsNum}
+	</delete>
+</mapper>

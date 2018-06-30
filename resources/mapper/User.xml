@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.yu.dao.UserDao">
+    <select id="toUserTelSelect" resultType="User">
+    SELECT userName,userSex,userPassword,userTel,userPayable,userAddress,userPower,userPayPassword,uuidString,power FROM t_user WHERE userTel=#{userTel}
+    </select>
+    <select id="isExistUserTel" resultType="int">
+    SELECT count(*) FROM t_user WHERE userTel=#{userTel}
+    </select>
+    <insert id="userRegister" parameterType="User">
+    INSERT INTO t_user(userName,userSex,userPassword,userTel,userPayable,userAddress,userPower,userPayPassword,uuidString,power,uuidPasswordString) VALUES(#{userName},#{userSex},#{userPassword},#{userTel},#{userPayable},#{userAddress},#{userPower},#{userPayPassword},#{uuidString},#{power},#{uuidPasswordString})
+    </insert>
+    <update id="userInforUpdata" parameterType="User">
+    UPDATE t_user set userName=#{userName},userSex=#{userSex},userAddress=#{userAddress} WHERE userTel=#{userTel}
+    </update>
+    <update id="updatePassword">
+    UPDATE t_user set userPassword=#{userPassword},uuidString=#{uuidString} WHERE userTel=#{userTel}
+    </update>
+    <update id="updatePayPassword">
+    UPDATE t_user set userPayPassword=#{userPayPassword},uuidPaawordString=#{uuidPasswordString} WHERE userTel=#{userTel}
+    </update>
+    <update id="reduceUserMoney">
+    UPDATE t_user set userPayable=userPayable-#{reduceMoney} WHERE userTel=#{userTel}
+    </update>
+ 	<select id="getPasswordByUserName" resultType="String">
+ 	SELECT userPassword FROM t_user WHERE userTel=#{userTel}
+ 	</select>
+ 	<select id="getUUIDByUserName" resultType="String">
+ 	SELECT uuidString FROM t_user WHERE userTel=#{userTel}
+ 	</select>
+ 	<select id="getRolesByUserName" resultType="String">
+ 	SELECT power FROM t_user WHERE userTel=#{userTel}
+ 	</select>
+ 	<select id="getUUIDByUserPayPassword" resultType="String">
+ 	SELECT uuidPasswordString FROM t_user WHERE userTel=#{userTel}
+ 	</select>
+ 	<select id="getByUserPayPassword" resultType="String">
+ 	SELECT userPayPassword FROM t_user WHERE userTel=#{userTel}
+ 	</select>
+ 	<select id="allVipUserInfor" resultType="User">
+ 	SELECT userName,userSex,userTel,userPayable,userAddress,userPower FROM t_user WHERE userPower=1
+ 	</select>
+    </mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd"> 
+     
+     <!-- 创建securityManager对象 -->
+     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">  
+        <property name="realm" ref="myRealm"/>  
+        <property name="rememberMeManager" ref="cookieRememberMeMananager"></property>
+     </bean>  
+      <!-- 自定义Realm -->
+     <bean id="myRealm" class="com.yu.shiro.CustomRealm"> 
+     <property name="credentialsMatcher" ref="credentialsMatcher"></property>
+     </bean>
+     <!-- 设置加密类型和次数 -->
+     <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher" 
+     id="credentialsMatcher">
+    	<property name="hashAlgorithmName" value="md5"></property>
+    	<property name="hashIterations" value="1"></property>
+     </bean>
+     <!-- 登录时记住我 -->
+     <bean class="org.apache.shiro.web.mgt.CookieRememberMeManager" id="cookieRememberMeMananager">
+     <property name="cookie" ref="cookie"></property>
+     </bean>
+     
+     <bean class="org.apache.shiro.web.servlet.SimpleCookie" id="cookie">
+     <constructor-arg value="rememberMe"></constructor-arg>
+     <property name="maxAge" value="604800"></property>
+     </bean>
+    <!-- Shiro过滤器 -->
+      <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">  
+          <property name="securityManager" ref="securityManager"/>
+          <!-- 身份认证失败，则跳转到登录页面的配置 -->  
+         <property name="loginUrl" value="/index"/>
+        <!-- 权限认证失败，则跳转到指定页面 -->  
+         <property name="unauthorizedUrl" value="/error"/>  
+        <!-- Shiro连接约束配置,即过滤链的定义 -->  
+          <property name="filterChainDefinitions">  
+            <value>  
+                 /login=anon
+                 /index=anon
+                 /choose_store=anon
+                 /chooseStore=anon
+                 /admin_login=anon
+                 /saveStore=anon
+                 /checkAdminLogin=anon
+             	/*=authc
+            </value>  
+        </property>
+    </bean>  
+  <!-- 配置这一段当shiro报异常时拦截下来并跳转到当前异常key所对应的页面   
+     一般多用于注解权限中,但是如果发送的的ajax请求的话这一段是没用的-->  
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+        <property name="exceptionMappings">  
+            <props>  
+                <prop key="org.apache.shiro.authz.UnauthorizedException">/error</prop>  
+            </props>  
+        </property>  
+    </bean>
+  </beans>
